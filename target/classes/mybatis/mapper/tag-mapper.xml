@@ -1,0 +1,73 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.mju.procedure.mapper.TagMapper">
+    <resultMap type="cn.edu.mju.procedure.entity.Tag" id="tagMap">
+        <id column="tag_id" property="tagId"/>
+        <result column="tag_name" property="tagName"/>
+        <result column="tag_parent" property="tagParent"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="tagMap" resultType="list">
+		select
+		tag_id,
+		tag_name,
+		tag_parent,
+		state
+		from x_tag
+	</select>
+
+    <select id="select" resultMap="tagMap" parameterType="cn.edu.mju.procedure.entity.Tag">
+
+		select
+		tag_id,
+		tag_name,
+		tag_parent,
+		state
+		from x_tag
+		<where>
+
+			<if test="tag != null and tag.tagId != null ">
+				and tag_id = #{tag.tagId}
+			</if>
+			<if test="tag != null and tag.tagName != null ">
+				and tag_name = #{tag.tagName}
+			</if>
+
+			<if test="tag != null and tag.state != null ">
+				and state = #{tag.state}
+			</if>
+
+		</where>
+
+	</select>
+
+
+    <insert id="insert"  parameterType="cn.edu.mju.procedure.entity.Tag">
+		insert
+		into x_tag(tag_name,tag_parent)
+		values(
+	      #{tag.tagName},#{tag.tagParent}
+	    )
+	</insert>
+
+
+	<update id="update" parameterType="cn.edu.mju.procedure.entity.Tag">
+
+		update x_tag
+		<set>
+			<if test="tag != null and tag.tagName != null">tag_name=#{tag.tagName},</if>
+			<if test="tag != null and tag.tagParent != null">tag_parent=#{tag.tagParent},</if>
+			<if test="tag != null and tag.state != null">state=#{tag.state}</if>
+		</set>
+
+		WHERE tag_id = #{tag.tagId}
+
+	</update>
+
+
+
+
+</mapper>
